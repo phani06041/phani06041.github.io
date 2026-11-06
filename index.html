@@ -170,7 +170,7 @@
         <h2><span>resume_scan.pdf · page 1</span></h2>
         <p><mark data-f="0">Maddipatla Phanindra</mark> works as a <mark data-f="1">Software Engineer</mark> at <mark data-f="2">Sagility</mark> in <mark data-f="3">Bengaluru</mark>.</p>
         <p>Builds <mark data-f="4">LLM pipelines that turn OCR'd healthcare documents into structured JSON</mark>, lifting high-priority field accuracy to <mark data-f="5">~97%</mark>.</p>
-        <p>B.Tech in CSE from <mark data-f="6">PES University</mark>. After hours: traffic agents, blood-donor routing and privacy scanners. Sleeps <mark class="low" data-f="7">occasionally</mark>.</p>
+        <p>B.Tech in CSE from <mark data-f="6">PES University</mark>. After hours: blood-donor routing, privacy scanners and traffic agents. Sleeps <mark class="low" data-f="7">occasionally</mark>.</p>
       </div>
       <div class="pane out">
         <h2><span>extracted.json</span><button class="replay" type="button" id="replay">Replay</button></h2>
@@ -226,26 +226,11 @@
 
 <section id="builds">
   <div class="wrap">
-    <div class="feature">
-      <div>
-        <h3>Silk Board Fixer</h3>
-        <p>An agent that times the traffic signals at Bengaluru's most notorious junction. A second-by-second simulator scores every plan; the agent reads the report, rewrites its own playbook, and runs again.</p>
-        <p style="color:var(--dim)">TypeScript · Claude · deterministic traffic simulator</p>
-        <div class="links"><a href="https://github.com/phani06041/silk-board-fixer">See the code</a></div>
-      </div>
-      <div class="race" aria-label="Run score improved from 38.3 on run 1 to 96.1 on run 4">
-        <h4>Score across runs (100 = as good as the optimiser)</h4>
-        <div class="bar"><span>Run 1</span><div class="track"><div class="fill" data-w="38.3" style="background:var(--coral)"></div></div><b>38.3</b></div>
-        <div class="bar"><span>Run 4</span><div class="track"><div class="fill" data-w="96.1" style="background:var(--mint)"></div></div><b>96.1</b></div>
-        <small>Same frozen scenarios each run, including an IPL night and a metro-works lane closure held out as tests.</small>
-      </div>
-    </div>
-
     <ul class="builds">
       <li>
         <h3><a href="https://github.com/phani06041/blood-bridge">Blood Bridge</a></h3>
         <p>Turns an urgent blood request into a verified hunt across nearby blood banks and opt-in donors, blocks "processing fee" scams, and tracks the request until it's met.</p>
-        <div class="links"><a href="https://github.com/phani06041/blood-bridge">Code</a></div>
+        <div class="links"><a href="https://asi1.ai/ai/agent1qwmsdzdktw8xrl8tz3zhahwr54nw32u9efwq9u57pw0629pa8ldeywy9def">Try the agent</a><a href="https://youtu.be/FusOGbrEeo4">Demo video</a><a href="https://github.com/phani06041/blood-bridge">Code</a></div>
       </li>
       <li>
         <h3><a href="https://github.com/phani06041/digital-footprints">Digital Footprints</a></h3>
@@ -271,6 +256,11 @@
         <h3><a href="https://github.com/phani06041/AI-LEARNS-TO-PLAY-FLAPPY-BIRD">AI learns Flappy Bird</a></h3>
         <p>A population of birds evolved with the NEAT genetic algorithm until they stop hitting pipes.</p>
         <div class="links"><a href="https://github.com/phani06041/AI-LEARNS-TO-PLAY-FLAPPY-BIRD">Code</a></div>
+      </li>
+      <li>
+        <h3><a href="https://github.com/phani06041/silk-board-fixer">Silk Board Fixer</a></h3>
+        <p>An agent that times the traffic signals at Bengaluru's most notorious junction, reads a second-by-second simulator report and rewrites its own playbook. Its score went from 38.3 on the first run to 96.1 by the fourth.</p>
+        <div class="links"><a href="https://youtu.be/gsxnndaB_pY">Demo video</a><a href="https://github.com/phani06041/silk-board-fixer">Code</a></div>
       </li>
     </ul>
   </div>
@@ -360,13 +350,6 @@
   }
   document.getElementById('replay').addEventListener('click', run);
   run();
-
-  // Silk Board bars fill when scrolled into view
-  const fills = document.querySelectorAll('.fill');
-  const show = () => fills.forEach(f => f.style.width = f.dataset.w + '%');
-  if (reduce || !('IntersectionObserver' in window)) show();
-  else new IntersectionObserver((es, o) => { if (es.some(e => e.isIntersecting)) { show(); o.disconnect(); } }, { threshold: .4 })
-    .observe(document.querySelector('.race'));
 
   const btn = document.getElementById('copy');
   btn.addEventListener('click', async () => {
