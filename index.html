@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Phanindra Maddipatla · Software Engineer</title>
+<meta name="description" content="Phanindra Maddipatla — software engineer in Bengaluru building LLM pipelines, AI agents and data systems." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,300..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --ink: #17143F;        /* page */
+    --ink-2: #211D55;      /* raised surfaces */
+    --line: #3A3580;
+    --paper: #EDEBFF;      /* main text */
+    --dim: #A9A4DB;        /* secondary text */
+    --hi: #FFE45C;         /* highlighter */
+    --mint: #7EE0B5;       /* high confidence */
+    --coral: #FF7A93;      /* low confidence */
+    --display: "Bricolage Grotesque", system-ui, sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, monospace;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; background: var(--ink); color: var(--paper);
+    font-family: var(--display); font-size: 18px; line-height: 1.55;
+    font-variation-settings: "opsz" 18;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; }
+  a:focus-visible, button:focus-visible { outline: 3px solid var(--hi); outline-offset: 3px; border-radius: 4px; }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 28px; }
+
+  /* nav */
+  nav { display: flex; justify-content: space-between; align-items: center; padding: 26px 0; }
+  nav .mark { font-weight: 800; font-size: 20px; text-decoration: none; letter-spacing: -0.02em; }
+  nav .mark span { background: var(--hi); color: var(--ink); padding: 0 6px; border-radius: 3px; margin-left: 2px; }
+  nav ul { list-style: none; display: flex; gap: 26px; margin: 0; padding: 0; font-size: 16px; }
+  nav ul a { text-decoration: none; color: var(--dim); }
+  nav ul a:hover { color: var(--paper); }
+
+  /* hero */
+  .hero { padding: 40px 0 90px; }
+  h1 {
+    font-size: clamp(54px, 10.5vw, 148px); line-height: 0.88; margin: 0;
+    font-weight: 800; letter-spacing: -0.045em;
+    font-variation-settings: "opsz" 96, "wdth" 78;
+  }
+  h1 .surname { display: block; color: transparent; -webkit-text-stroke: 2px var(--paper); }
+  .lede { max-width: 34ch; font-size: clamp(20px, 2.2vw, 26px); line-height: 1.35; margin: 28px 0 0; color: var(--paper); font-weight: 400; }
+  .lede em { font-style: normal; color: var(--dim); }
+
+  .parser { display: grid; grid-template-columns: 1.05fr 1fr; gap: 0; margin-top: 64px; border: 1px solid var(--line); border-radius: 18px; overflow: hidden; }
+  .pane { padding: 26px 28px 30px; }
+  .pane h2 { font-size: 14px; font-weight: 500; color: var(--dim); margin: 0 0 18px; display: flex; justify-content: space-between; }
+  .doc { background: var(--paper); color: #2A2560; font-size: 19px; line-height: 1.75; }
+  .doc h2 { color: #6D67A8; }
+  .doc p { margin: 0 0 12px; }
+  .doc mark { background: transparent; color: inherit; border-radius: 3px; padding: 0 2px; transition: background .35s; }
+  .doc mark.on { background: var(--hi); }
+  .doc mark.low.on { background: #FFC4CF; }
+  .out { background: var(--ink-2); font-family: var(--mono); font-size: 14.5px; line-height: 1.9; }
+  .out pre { margin: 0; white-space: pre-wrap; }
+  .out .row { opacity: 0; transform: translateY(4px); transition: opacity .3s, transform .3s; display: block; }
+  .out .row.on { opacity: 1; transform: none; }
+  .k { color: #B9B3FF; } .s { color: var(--hi); } .n { color: var(--mint); } .nul { color: var(--coral); }
+  .conf { display: inline-block; font-size: 11.5px; padding: 0 7px; border-radius: 99px; margin-left: 8px; vertical-align: 1px; border: 1px solid currentColor; }
+  .conf.hi { color: var(--mint); } .conf.lo { color: var(--coral); }
+  .status { margin-top: 18px; font-family: var(--display); font-size: 15px; color: var(--dim); min-height: 1.5em; }
+  .status b { color: var(--mint); font-weight: 600; }
+  .replay { font: inherit; font-size: 14px; background: none; border: 1px solid var(--line); color: var(--dim); border-radius: 99px; padding: 2px 12px; cursor: pointer; }
+  .replay:hover { color: var(--paper); border-color: var(--dim); }
+
+  /* sections */
+  section { padding: 90px 0; border-top: 1px solid var(--line); }
+  .sec-head { display: grid; grid-template-columns: 300px 1fr; gap: 40px; }
+  h2.title { font-size: clamp(34px, 4.4vw, 54px); line-height: 1; letter-spacing: -0.03em; margin: 0; font-weight: 700; font-variation-settings: "opsz" 72, "wdth" 85; }
+  .sec-intro { color: var(--dim); margin: 14px 0 0; font-size: 17px; max-width: 30ch; }
+
+  /* work timeline */
+  .timeline { list-style: none; margin: 0; padding: 0; }
+  .timeline > li { display: grid; grid-template-columns: 150px 1fr; gap: 24px; padding: 0 0 46px; position: relative; }
+  .when { color: var(--dim); font-size: 15px; padding-top: 6px; }
+  .role h3 { margin: 0; font-size: 28px; letter-spacing: -0.02em; font-weight: 700; }
+  .role .org { color: var(--dim); margin: 2px 0 18px; }
+  .system { border-left: 3px solid var(--hi); padding: 4px 0 4px 20px; margin: 0 0 26px; }
+  .system h4 { margin: 0 0 6px; font-size: 20px; font-weight: 600; }
+  .system p { margin: 0; max-width: 62ch; color: var(--paper); }
+  .system .stat { display: flex; align-items: baseline; gap: 12px; margin: 14px 0 0; }
+  .system .stat strong { font-size: 44px; line-height: 1; font-weight: 800; color: var(--hi); letter-spacing: -0.03em; }
+  .system .stat span { color: var(--dim); font-size: 15px; max-width: 30ch; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0 0; padding: 0; list-style: none; }
+  .chips li { font-size: 14px; border: 1px solid var(--line); border-radius: 99px; padding: 2px 12px; color: var(--dim); }
+  .small-roles li { padding-bottom: 22px; }
+  .small-roles h3 { font-size: 20px; }
+
+  /* builds */
+  .feature { display: grid; grid-template-columns: 1.2fr 1fr; gap: 50px; align-items: center; padding: 10px 0 60px; }
+  .feature h3 { font-size: clamp(40px, 5.6vw, 76px); line-height: .92; letter-spacing: -0.04em; margin: 0 0 18px; font-weight: 800; font-variation-settings: "opsz" 96, "wdth" 80; }
+  .feature p { max-width: 50ch; margin: 0 0 16px; }
+  .race { background: var(--ink-2); border-radius: 18px; padding: 28px; }
+  .race h4 { margin: 0 0 20px; font-weight: 500; font-size: 15px; color: var(--dim); }
+  .bar { display: grid; grid-template-columns: 64px 1fr 54px; align-items: center; gap: 12px; margin-bottom: 14px; font-size: 15px; }
+  .bar .track { height: 26px; background: #2C2768; border-radius: 6px; overflow: hidden; }
+  .bar .fill { height: 100%; width: 0; border-radius: 6px; transition: width 1.4s cubic-bezier(.2,.8,.2,1); }
+  .bar b { font-weight: 700; text-align: right; }
+  .race small { display: block; color: var(--dim); font-size: 13.5px; margin-top: 16px; line-height: 1.5; }
+
+  .builds { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, 1fr); column-gap: 60px; }
+  .builds li { border-top: 1px solid var(--line); padding: 26px 0 30px; }
+  .builds h3 { margin: 0 0 8px; font-size: 26px; letter-spacing: -0.02em; font-weight: 700; }
+  .builds h3 a { text-decoration: none; }
+  .builds h3 a:hover { text-decoration: underline; text-decoration-color: var(--hi); text-decoration-thickness: 3px; text-underline-offset: 5px; }
+  .builds p { margin: 0; color: var(--dim); max-width: 46ch; }
+  .links { display: flex; gap: 18px; margin-top: 12px; font-size: 15px; }
+  .links a { color: var(--hi); text-underline-offset: 4px; }
+
+  /* about grid */
+  .about { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; }
+  .about h3 { font-size: 17px; font-weight: 600; margin: 0 0 12px; color: var(--hi); }
+  .about ul { list-style: none; margin: 0; padding: 0; }
+  .about li { padding: 6px 0; border-bottom: 1px solid #2C2768; font-size: 16.5px; }
+  .about li span { color: var(--dim); }
+
+  /* contact */
+  .contact { padding: 120px 0 70px; }
+  .contact .big { font-size: clamp(40px, 8vw, 112px); line-height: .95; letter-spacing: -0.045em; font-weight: 800; margin: 0 0 34px; font-variation-settings: "opsz" 96, "wdth" 80; max-width: 12ch; }
+  .email { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 14px; font-size: clamp(20px, 2.6vw, 30px); }
+  .email a { text-decoration-color: var(--hi); text-decoration-thickness: 3px; text-underline-offset: 7px; }
+  .copy { font: inherit; font-size: 15px; background: var(--hi); color: var(--ink); border: 0; border-radius: 99px; padding: 6px 16px; cursor: pointer; font-weight: 600; }
+  .elsewhere { display: flex; gap: 28px; margin-top: 30px; font-size: 18px; }
+  footer { color: var(--dim); font-size: 14px; padding: 30px 0 50px; border-top: 1px solid var(--line); }
+
+  @media (max-width: 900px) {
+    .parser, .feature, .sec-head, .about { grid-template-columns: 1fr; }
+    .builds { grid-template-columns: 1fr; }
+    .timeline > li { grid-template-columns: 1fr; gap: 4px; }
+    nav ul { display: none; }
+    .sec-head { gap: 26px; }
+    .out { font-size: 12px; }
+    .pane { padding: 22px 18px 24px; }
+    .doc { font-size: 17px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .out .row, .doc mark, .bar .fill { transition: none; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav aria-label="Main">
+    <a class="mark" href="#top">phani<span>.</span></a>
+    <ul>
+      <li><a href="#work">Work</a></li>
+      <li><a href="#builds">Builds</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <header class="hero" id="top">
+    <h1>Phanindra<span class="surname">Maddipatla</span></h1>
+    <p class="lede">I build AI that reads messy documents and hands back clean data. <em>Software engineer at Sagility, Bengaluru.</em></p>
+
+    <div class="parser" aria-label="Demo: a resume being parsed into JSON">
+      <div class="pane doc">
+        <h2><span>resume_scan.pdf · page 1</span></h2>
+        <p><mark data-f="0">Maddipatla Phanindra</mark> works as a <mark data-f="1">Software Engineer</mark> at <mark data-f="2">Sagility</mark> in <mark data-f="3">Bengaluru</mark>.</p>
+        <p>Builds <mark data-f="4">LLM pipelines that turn OCR'd healthcare documents into structured JSON</mark>, lifting high-priority field accuracy to <mark data-f="5">~97%</mark>.</p>
+        <p>B.Tech in CSE from <mark data-f="6">PES University</mark>. After hours: traffic agents, blood-donor routing and privacy scanners. Sleeps <mark class="low" data-f="7">occasionally</mark>.</p>
+      </div>
+      <div class="pane out">
+        <h2><span>extracted.json</span><button class="replay" type="button" id="replay">Replay</button></h2>
+<pre><span class="row">{</span><span class="row" data-r="0">  <span class="k">"name"</span>: <span class="s">"Maddipatla Phanindra"</span>,<span class="conf hi">0.99</span></span><span class="row" data-r="1">  <span class="k">"role"</span>: <span class="s">"Software Engineer"</span>,<span class="conf hi">0.98</span></span><span class="row" data-r="2">  <span class="k">"company"</span>: <span class="s">"Sagility"</span>,<span class="conf hi">0.99</span></span><span class="row" data-r="3">  <span class="k">"city"</span>: <span class="s">"Bengaluru"</span>,<span class="conf hi">0.97</span></span><span class="row" data-r="4">  <span class="k">"specialty"</span>: <span class="s">"LLM document extraction"</span>,<span class="conf hi">0.95</span></span><span class="row" data-r="5">  <span class="k">"field_accuracy"</span>: <span class="n">0.97</span>,<span class="conf hi">0.96</span></span><span class="row" data-r="6">  <span class="k">"education"</span>: <span class="s">"B.Tech CSE, PES University"</span>,<span class="conf hi">0.98</span></span><span class="row" data-r="7">  <span class="k">"sleep_schedule"</span>: <span class="nul">null</span><span class="conf lo">0.12</span></span><span class="row" data-r="8">}</span></pre>
+        <p class="status" id="status" aria-live="polite"></p>
+      </div>
+    </div>
+  </header>
+</div>
+
+<section id="work">
+  <div class="wrap sec-head">
+    <div>
+      <h2 class="title">Work</h2>
+      <p class="sec-intro">Production AI in healthcare operations, where a wrong field has real consequences.</p>
+    </div>
+    <ol class="timeline">
+      <li>
+        <div class="when">Jun 2024 – now</div>
+        <div class="role">
+          <h3>Software Engineer</h3>
+          <p class="org">Sagility · Bengaluru</p>
+          <div class="system">
+            <h4>Resolution Scanning System</h4>
+            <p>An AI document pipeline that reads unstructured medical documents with OCR and OpenAI, returns structured JSON, and classifies each one as expedited or not and by request type. Confidence scoring sends shaky extractions to a human instead of guessing.</p>
+            <div class="stat"><strong>~97%</strong><span>accuracy on high-priority fields, through prompt refinement, business rules and confidence-based validation</span></div>
+            <ul class="chips"><li>Python</li><li>OCR</li><li>OpenAI</li><li>JSON validation</li><li>Audit reporting</li></ul>
+          </div>
+          <div class="system">
+            <h4>Workforce forecasting</h4>
+            <p>Predicts monthly staffing across operational inventories. Time-series models forecast workload hours, then working calendars, productivity targets and shift schedules turn them into headcount. Erlang C was evaluated for queue-based staffing.</p>
+            <ul class="chips"><li>ARIMA</li><li>Holt-Winters</li><li>Regression</li><li>Erlang C</li></ul>
+          </div>
+        </div>
+      </li>
+      <li class="small-roles">
+        <div class="when">2023 – 2024</div>
+        <div class="role">
+          <h3>Teaching Assistant</h3>
+          <p class="org">PES University · Cloud Computing, DBMS, and OOAD with Java</p>
+        </div>
+      </li>
+      <li class="small-roles">
+        <div class="when">2022 – 2023</div>
+        <div class="role">
+          <h3>Campus Ambassador</h3>
+          <p class="org">Coding Ninjas · promoted test series and hackathons on campus</p>
+        </div>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<section id="builds">
+  <div class="wrap">
+    <div class="feature">
+      <div>
+        <h3>Silk Board Fixer</h3>
+        <p>An agent that times the traffic signals at Bengaluru's most notorious junction. A second-by-second simulator scores every plan; the agent reads the report, rewrites its own playbook, and runs again.</p>
+        <p style="color:var(--dim)">TypeScript · Claude · deterministic traffic simulator</p>
+        <div class="links"><a href="https://github.com/phani06041/silk-board-fixer">See the code</a></div>
+      </div>
+      <div class="race" aria-label="Run score improved from 38.3 on run 1 to 96.1 on run 4">
+        <h4>Score across runs (100 = as good as the optimiser)</h4>
+        <div class="bar"><span>Run 1</span><div class="track"><div class="fill" data-w="38.3" style="background:var(--coral)"></div></div><b>38.3</b></div>
+        <div class="bar"><span>Run 4</span><div class="track"><div class="fill" data-w="96.1" style="background:var(--mint)"></div></div><b>96.1</b></div>
+        <small>Same frozen scenarios each run, including an IPL night and a metro-works lane closure held out as tests.</small>
+      </div>
+    </div>
+
+    <ul class="builds">
+      <li>
+        <h3><a href="https://github.com/phani06041/blood-bridge">Blood Bridge</a></h3>
+        <p>Turns an urgent blood request into a verified hunt across nearby blood banks and opt-in donors, blocks "processing fee" scams, and tracks the request until it's met.</p>
+        <div class="links"><a href="https://github.com/phani06041/blood-bridge">Code</a></div>
+      </li>
+      <li>
+        <h3><a href="https://github.com/phani06041/digital-footprints">Digital Footprints</a></h3>
+        <p>A self-privacy scanner that finds what the public web says about you, links every finding to its source and scores your exposure.</p>
+        <div class="links"><a href="https://digital-footprints.onrender.com/">Live app</a><a href="https://youtu.be/5gLTz1Skw8k">Demo video</a><a href="https://github.com/phani06041/digital-footprints">Code</a></div>
+      </li>
+      <li>
+        <h3><a href="https://github.com/phani06041/AI_Resume_optimiser">AI Resume Pro</a></h3>
+        <p>Scores a resume against a job description and rewrites it, with an AI career coach and automatic fallback between Gemini and OpenAI.</p>
+        <div class="links"><a href="https://phani06041.github.io/AI_Resume_optimiser/">Live app</a><a href="https://github.com/phani06041/AI_Resume_optimiser">Code</a></div>
+      </li>
+      <li>
+        <h3><a href="https://github.com/phani06041/fraud-detection-slm">Fraud Sentinel</a></h3>
+        <p>Fraud scoring with prompt-injection defence, behavioural features, Isolation Forest and a small language model, with a deterministic fallback when the model can't answer.</p>
+        <div class="links"><a href="https://github.com/phani06041/fraud-detection-slm">Code</a></div>
+      </li>
+      <li>
+        <h3><a href="https://github.com/phani06041/rag-knowledge-bot">RAG Knowledge Bot</a></h3>
+        <p>A local, privacy-first chatbot over your own PDFs and docs, built on ChromaDB, FastAPI and Llama 3, with Redis caching.</p>
+        <div class="links"><a href="https://github.com/phani06041/rag-knowledge-bot">Code</a></div>
+      </li>
+      <li>
+        <h3><a href="https://github.com/phani06041/AI-LEARNS-TO-PLAY-FLAPPY-BIRD">AI learns Flappy Bird</a></h3>
+        <p>A population of birds evolved with the NEAT genetic algorithm until they stop hitting pipes.</p>
+        <div class="links"><a href="https://github.com/phani06041/AI-LEARNS-TO-PLAY-FLAPPY-BIRD">Code</a></div>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<section id="about">
+  <div class="wrap">
+    <div class="sec-head" style="margin-bottom:50px">
+      <h2 class="title">About</h2>
+      <p class="sec-intro" style="max-width:56ch;margin:0;color:var(--paper);font-size:19px">I studied computer science at PES University on a merit scholarship, and now spend my days making language models behave in places where accuracy matters. Evenings go to hackathons and to whatever Bengaluru problem is annoying me that week. I speak Telugu, English, Kannada and Hindi.</p>
+    </div>
+    <div class="about">
+      <div>
+        <h3>Toolkit</h3>
+        <ul>
+          <li>Python, SQL, Java, C</li>
+          <li>LLMs, RAG, NLP, GenAI</li>
+          <li>Machine learning, forecasting</li>
+          <li>Power BI, Excel</li>
+          <li>Azure, AWS basics</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Education</h3>
+        <ul>
+          <li>B.Tech CSE, PES University <span>2020–24</span></li>
+          <li>CGPA 8.14</li>
+          <li>DAC Scholarship for academic excellence, years 1–3</li>
+          <li>Class XII <span>96.7%</span> · Class X <span>98%</span></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Certificates</h3>
+        <ul>
+          <li>Build with AI Bootcamp, Bengaluru</li>
+          <li>AI Pair Programming with GitHub Copilot</li>
+          <li>Deloitte Australia Data Analytics simulation</li>
+          <li>AWS Educate: Introduction to Cloud 101</li>
+          <li>Machine Learning with Python</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <div class="wrap">
+    <p class="big">Got a messy problem? Send it over.</p>
+    <div class="email">
+      <a href="mailto:phanindra.maddipatla@gmail.com">phanindra.maddipatla@gmail.com</a>
+      <button class="copy" type="button" id="copy">Copy email</button>
+    </div>
+    <div class="elsewhere">
+      <a href="https://www.linkedin.com/in/mphani/">LinkedIn</a>
+      <a href="https://github.com/phani06041">GitHub</a>
+    </div>
+  </div>
+</section>
+
+<div class="wrap"><footer>Phanindra Maddipatla · Bengaluru · 2026</footer></div>
+
+<script>
+(() => {
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const marks = [...document.querySelectorAll('.doc mark')];
+  const rows = [...document.querySelectorAll('.out .row')];
+  const status = document.getElementById('status');
+  let timers = [];
+
+  function finish() {
+    status.innerHTML = '<b>7 of 8 fields extracted.</b> sleep_schedule sent to human review.';
+  }
+  function run() {
+    timers.forEach(clearTimeout); timers = [];
+    marks.forEach(m => m.classList.remove('on'));
+    rows.forEach(r => r.classList.remove('on'));
+    if (reduce) { marks.forEach(m => m.classList.add('on')); rows.forEach(r => r.classList.add('on')); finish(); return; }
+    status.textContent = 'Reading document…';
+    rows[0].classList.add('on');
+    marks.forEach((m, i) => {
+      timers.push(setTimeout(() => {
+        m.classList.add('on');
+        document.querySelector(`.row[data-r="${i}"]`).classList.add('on');
+      }, 500 + i * 520));
+    });
+    timers.push(setTimeout(() => { rows[rows.length - 1].classList.add('on'); finish(); }, 500 + marks.length * 520));
+  }
+  document.getElementById('replay').addEventListener('click', run);
+  run();
+
+  // Silk Board bars fill when scrolled into view
+  const fills = document.querySelectorAll('.fill');
+  const show = () => fills.forEach(f => f.style.width = f.dataset.w + '%');
+  if (reduce || !('IntersectionObserver' in window)) show();
+  else new IntersectionObserver((es, o) => { if (es.some(e => e.isIntersecting)) { show(); o.disconnect(); } }, { threshold: .4 })
+    .observe(document.querySelector('.race'));
+
+  const btn = document.getElementById('copy');
+  btn.addEventListener('click', async () => {
+    try { await navigator.clipboard.writeText('phanindra.maddipatla@gmail.com'); btn.textContent = 'Copied'; }
+    catch { btn.textContent = 'Select the address to copy'; }
+    setTimeout(() => btn.textContent = 'Copy email', 2200);
+  });
+})();
+</script>
+</body>
+</html>
