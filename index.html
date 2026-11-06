@@ -49,6 +49,12 @@
     font-variation-settings: "opsz" 96, "wdth" 88;
   }
   h1 .surname { display: block; color: transparent; -webkit-text-stroke: 2px var(--paper); letter-spacing: 0.005em; }
+  .name-stage { position: relative; display: inline-block; }
+  #dust { position: absolute; left: -60px; top: -60px; width: calc(100% + 120px); height: calc(100% + 120px); display: none; touch-action: pan-y; }
+  .particles #dust { display: block; }
+  .particles h1, .particles h1 .surname { color: transparent; -webkit-text-stroke: 0 transparent; }
+  .hint { display: none; margin: 14px 0 0; font-size: 14px; color: var(--dim); }
+  .particles .hint { display: block; }
   .lede { max-width: 34ch; font-size: clamp(20px, 2.2vw, 26px); line-height: 1.35; margin: 28px 0 0; color: var(--paper); font-weight: 400; }
   .lede em { font-style: normal; color: var(--dim); }
 
@@ -162,7 +168,11 @@
   </nav>
 
   <header class="hero" id="top">
-    <h1>Phanindra<span class="surname">Maddipatla</span></h1>
+    <div class="name-stage">
+      <h1 id="name">Phanindra<span class="surname">Maddipatla</span></h1>
+      <canvas id="dust" aria-hidden="true"></canvas>
+    </div>
+    <p class="hint" id="hint">Run your cursor or finger through my name.</p>
     <p class="lede">I build AI that reads messy documents and hands back clean data. <em>Software engineer at Sagility, Bengaluru.</em></p>
 
     <div class="parser" aria-label="Demo: a resume being parsed into JSON">
@@ -350,6 +360,105 @@
   }
   document.getElementById('replay').addEventListener('click', run);
   run();
+
+
+  // Name made of particles: assembles on load, scatters from the pointer, drifts home
+  (function dust() {
+    const stage = document.querySelector('.name-stage');
+    const h1 = document.getElementById('name');
+    const cv = document.getElementById('dust');
+    if (!cv.getContext || !document.fonts) return;
+    const ctx = cv.getContext('2d');
+    const PAD = 60;
+    const COLORS = ['#EDEBFF', '#EDEBFF', '#EDEBFF', '#FFE45C', '#7EE0B5', '#B9B3FF'];
+    let parts = [], W = 0, H = 0, dpr = 1, raf = 0, visible = true;
+    const mouse = { x: -9999, y: -9999 };
+
+    function sample() {
+      document.documentElement.classList.add('particles');
+      const r = h1.getBoundingClientRect();
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      W = Math.ceil(r.width + PAD * 2); H = Math.ceil(r.height + PAD * 2);
+      cv.width = W * dpr; cv.height = H * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      const cs = getComputedStyle(h1);
+      let fs = parseFloat(cs.fontSize);
+      const lh = parseFloat(cs.lineHeight) || fs * 0.88;
+      const off = document.createElement('canvas');
+      off.width = W; off.height = H;
+      const o = off.getContext('2d');
+      const setFont = () => { o.font = `800 ${fs}px "Bricolage Grotesque", system-ui, sans-serif`; try { o.fontStretch = 'semi-condensed'; } catch (e) {} };
+      setFont();
+      const widest = Math.max(o.measureText('Phanindra').width, o.measureText('Maddipatla').width);
+      if (widest > r.width) { fs *= r.width / widest; setFont(); }
+      o.textBaseline = 'alphabetic';
+      const base = (i) => PAD + lh * i + lh * 0.84;
+      o.fillStyle = '#fff';
+      o.fillText('Phanindra', PAD, base(0));
+      o.strokeStyle = '#fff';
+      o.strokeText('Maddipatla', PAD, base(1));
+
+      const gap = Math.max(3, Math.round(fs / 34));
+      o.clearRect(0, 0, W, H);
+      o.fillText('Phanindra', PAD, base(0));
+      o.lineWidth = gap * 1.3; o.lineJoin = 'round';
+      o.strokeText('Maddipatla', PAD, base(1));
+      const data = o.getImageData(0, 0, W, H).data;
+      const split = PAD + lh;
+      const old = parts; parts = [];
+      for (let y = 0; y < H; y += gap) {
+        for (let x = 0; x < W; x += gap) {
+          if (data[(y * W + x) * 4 + 3] > 128) {
+            const prev = old[parts.length];
+            parts.push({
+              hx: x + (Math.random() - .5) * gap * .5, hy: y + (Math.random() - .5) * gap * .5,
+              x: prev ? prev.x : Math.random() * W, y: prev ? prev.y : Math.random() * H,
+              vx: 0, vy: 0,
+              c: y < split ? COLORS[(Math.random() * COLORS.length) | 0] : (Math.random() < .25 ? '#FFE45C' : '#B9B3FF'),
+              s: y < split ? gap * 0.78 : gap * 0.6
+            });
+          }
+        }
+      }
+    }
+
+    function frame() {
+      ctx.clearRect(0, 0, W, H);
+      const R = 90, R2 = R * R;
+      for (const p of parts) {
+        const dx = p.x - mouse.x, dy = p.y - mouse.y, d2 = dx * dx + dy * dy;
+        if (d2 < R2) { const f = (1 - d2 / R2) * 6, d = Math.sqrt(d2) || 1; p.vx += dx / d * f; p.vy += dy / d * f; }
+        p.vx += (p.hx - p.x) * 0.045; p.vy += (p.hy - p.y) * 0.045;
+        p.vx *= 0.82; p.vy *= 0.82;
+        p.x += p.vx; p.y += p.vy;
+        ctx.fillStyle = p.c;
+        ctx.fillRect(p.x, p.y, p.s, p.s);
+      }
+      raf = visible ? requestAnimationFrame(frame) : 0;
+    }
+    function staticDraw() {
+      ctx.clearRect(0, 0, W, H);
+      for (const p of parts) { p.x = p.hx; p.y = p.hy; ctx.fillStyle = p.c; ctx.fillRect(p.x, p.y, p.s, p.s); }
+    }
+
+    function pointer(e) { const r = cv.getBoundingClientRect(); mouse.x = e.clientX - r.left; mouse.y = e.clientY - r.top; }
+    cv.addEventListener('pointermove', pointer);
+    cv.addEventListener('pointerdown', pointer);
+    cv.addEventListener('pointerleave', () => { mouse.x = mouse.y = -9999; });
+
+    document.fonts.ready.then(() => {
+      sample();
+      if (reduce) { staticDraw(); return; }
+      frame();
+      new IntersectionObserver(es => {
+        visible = es[0].isIntersecting;
+        if (visible && !raf) raf = requestAnimationFrame(frame);
+      }).observe(stage);
+      let t;
+      window.addEventListener('resize', () => { clearTimeout(t); t = setTimeout(sample, 150); });
+    });
+  })();
 
   const btn = document.getElementById('copy');
   btn.addEventListener('click', async () => {
