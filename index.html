@@ -139,6 +139,38 @@
   .elsewhere { display: flex; gap: 28px; margin-top: 30px; font-size: 18px; }
   footer { color: var(--dim); font-size: 14px; padding: 30px 0 50px; border-top: 1px solid var(--line); }
 
+
+  .cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
+  .btn { font-size: 16px; font-weight: 600; text-decoration: none; padding: 11px 22px; border-radius: 99px; border: 1px solid var(--line); color: var(--paper); }
+  .btn:hover { border-color: var(--dim); }
+  .btn.primary { background: var(--hi); color: var(--ink); border-color: var(--hi); }
+  .btn.primary:hover { background: #fff; border-color: #fff; }
+  .btn.ghost { border-color: transparent; color: var(--dim); }
+  .btn.ghost:hover { color: var(--paper); }
+  .builds-head { margin-bottom: 44px; }
+  .cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 26px; margin-bottom: 56px; }
+  .card { background: var(--ink-2); border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; }
+  .card:first-child { grid-column: span 2; flex-direction: row; }
+  .card:first-child .thumb { flex: 1.25; aspect-ratio: 16 / 9; }
+  .card:first-child .card-body { flex: 1; padding: 30px 32px; }
+  .card:first-child h3 { font-size: 32px; }
+  .thumb { display: block; aspect-ratio: 16 / 9; background: #2C2768; overflow: hidden; }
+  .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .4s ease; }
+  .thumb:hover img { transform: scale(1.04); }
+  .card-body { padding: 22px 24px 24px; display: flex; flex-direction: column; flex: 1; }
+  .card h3 { margin: 0 0 8px; font-size: 24px; letter-spacing: -0.02em; font-weight: 700; }
+  .card h3 a, .builds h3 a { text-decoration: none; }
+  .card p { margin: 0 0 10px; color: var(--dim); font-size: 16.5px; }
+  p.result { color: var(--mint); font-size: 15.5px; }
+  .card .chips, .builds .chips { margin: 4px 0 0; }
+  .builds .chips li { padding: 2px 12px; border: 1px solid var(--line); }
+  .builds p.result { margin-top: 8px; color: var(--mint); }
+  .card .links { margin-top: auto; padding-top: 14px; }
+  @media (max-width: 1000px) {
+    .cards { grid-template-columns: 1fr; }
+    .card:first-child { grid-column: auto; flex-direction: column; }
+    .card:first-child .thumb { aspect-ratio: 16 / 9; }
+  }
   @media (max-width: 900px) {
     .parser, .feature, .sec-head, .about { grid-template-columns: 1fr; }
     .builds { grid-template-columns: 1fr; }
@@ -174,6 +206,11 @@
     </div>
     <p class="hint" id="hint">Run your cursor or finger through my name.</p>
     <p class="lede">I build AI that reads messy documents and hands back clean data. <em>Software engineer at Sagility, Bengaluru.</em></p>
+    <div class="cta">
+      <a class="btn primary" href="#builds">See my work</a>
+      <a class="btn" href="#contact">Get in touch</a>
+      <a class="btn ghost" href="https://github.com/phani06041">GitHub</a>
+    </div>
 
     <div class="parser" aria-label="Demo: a resume being parsed into JSON">
       <div class="pane doc">
@@ -236,40 +273,69 @@
 
 <section id="builds">
   <div class="wrap">
+    <div class="sec-head builds-head">
+      <h2 class="title">Builds</h2>
+      <p class="sec-intro">Things I made to fix problems I actually ran into, mostly in Bengaluru.</p>
+    </div>
+    <div class="cards">
+      <article class="card">
+        <a class="thumb" href="https://youtu.be/FusOGbrEeo4"><img src="https://i.ytimg.com/vi/FusOGbrEeo4/hqdefault.jpg" alt="Blood Bridge demo video" loading="lazy" /></a>
+        <div class="card-body">
+          <h3><a href="https://github.com/phani06041/blood-bridge">Blood Bridge</a></h3>
+          <p>In India, urgent blood requests spread as unverified WhatsApp forwards, and scammers ask for fake “processing fees”. Blood Bridge verifies the request, routes it to nearby blood banks and compatible opt-in donors in Bengaluru, and tracks it until it's met.</p>
+          <p class="result">Live on ASI:One, with a safe demo mode that never alerts real donors.</p>
+          <ul class="chips"><li>Python</li><li>uAgents</li><li>OpenAI</li><li>ASI:One</li></ul>
+          <div class="links"><a href="https://asi1.ai/ai/agent1qwmsdzdktw8xrl8tz3zhahwr54nw32u9efwq9u57pw0629pa8ldeywy9def">Try the agent</a><a href="https://youtu.be/FusOGbrEeo4">Demo video</a><a href="https://github.com/phani06041/blood-bridge">Code</a></div>
+        </div>
+      </article>
+      <article class="card">
+        <a class="thumb" href="https://youtu.be/5gLTz1Skw8k"><img src="https://i.ytimg.com/vi/5gLTz1Skw8k/hqdefault.jpg" alt="Digital Footprints demo video" loading="lazy" /></a>
+        <div class="card-body">
+          <h3><a href="https://github.com/phani06041/digital-footprints">Digital Footprints</a></h3>
+          <p>A self-privacy scanner. It searches the public web for you, links every finding to its source, estimates how confidently it's really you, scores your exposure and suggests fixes.</p>
+          <p class="result">Deployed on Render, with a recorded walkthrough.</p>
+          <ul class="chips"><li>FastAPI</li><li>Python</li><li>Docker</li><li>Web search</li></ul>
+          <div class="links"><a href="https://digital-footprints.onrender.com/">Live app</a><a href="https://youtu.be/5gLTz1Skw8k">Demo video</a><a href="https://github.com/phani06041/digital-footprints">Code</a></div>
+        </div>
+      </article>
+      <article class="card">
+        <a class="thumb" href="https://phani06041.github.io/AI_Resume_optimiser/"><img src="https://raw.githubusercontent.com/phani06041/AI_Resume_optimiser/main/screenshots/dashboard_dark.png" alt="AI Resume Pro dashboard" loading="lazy" /></a>
+        <div class="card-body">
+          <h3><a href="https://github.com/phani06041/AI_Resume_optimiser">AI Resume Pro</a></h3>
+          <p>Parses a resume in the browser, scores it against a job description and rewrites it, with an AI career coach on every screen.</p>
+          <p class="result">Switches between Gemini and OpenAI automatically when one hits a rate limit.</p>
+          <ul class="chips"><li>JavaScript</li><li>Vite</li><li>Gemini</li><li>OpenAI</li></ul>
+          <div class="links"><a href="https://phani06041.github.io/AI_Resume_optimiser/">Live app</a><a href="https://github.com/phani06041/AI_Resume_optimiser">Code</a></div>
+        </div>
+      </article>
+    </div>
     <ul class="builds">
       <li>
-        <h3><a href="https://github.com/phani06041/blood-bridge">Blood Bridge</a></h3>
-        <p>Turns an urgent blood request into a verified hunt across nearby blood banks and opt-in donors, blocks "processing fee" scams, and tracks the request until it's met.</p>
-        <div class="links"><a href="https://asi1.ai/ai/agent1qwmsdzdktw8xrl8tz3zhahwr54nw32u9efwq9u57pw0629pa8ldeywy9def">Try the agent</a><a href="https://youtu.be/FusOGbrEeo4">Demo video</a><a href="https://github.com/phani06041/blood-bridge">Code</a></div>
-      </li>
-      <li>
-        <h3><a href="https://github.com/phani06041/digital-footprints">Digital Footprints</a></h3>
-        <p>A self-privacy scanner that finds what the public web says about you, links every finding to its source and scores your exposure.</p>
-        <div class="links"><a href="https://digital-footprints.onrender.com/">Live app</a><a href="https://youtu.be/5gLTz1Skw8k">Demo video</a><a href="https://github.com/phani06041/digital-footprints">Code</a></div>
-      </li>
-      <li>
-        <h3><a href="https://github.com/phani06041/AI_Resume_optimiser">AI Resume Pro</a></h3>
-        <p>Scores a resume against a job description and rewrites it, with an AI career coach and automatic fallback between Gemini and OpenAI.</p>
-        <div class="links"><a href="https://phani06041.github.io/AI_Resume_optimiser/">Live app</a><a href="https://github.com/phani06041/AI_Resume_optimiser">Code</a></div>
-      </li>
-      <li>
         <h3><a href="https://github.com/phani06041/fraud-detection-slm">Fraud Sentinel</a></h3>
-        <p>Fraud scoring with prompt-injection defence, behavioural features, Isolation Forest and a small language model, with a deterministic fallback when the model can't answer.</p>
+        <p>Scores transactions for fraud: data forensics, prompt-injection defence, behavioural features, Isolation Forest and a small language model.</p>
+        <p class="result">Validates every model answer as strict JSON and falls back to a deterministic score instead of crashing.</p>
+        <ul class="chips"><li>Python</li><li>scikit-learn</li><li>Llama 3.2 1B</li><li>Transformers</li></ul>
         <div class="links"><a href="https://github.com/phani06041/fraud-detection-slm">Code</a></div>
       </li>
       <li>
         <h3><a href="https://github.com/phani06041/rag-knowledge-bot">RAG Knowledge Bot</a></h3>
-        <p>A local, privacy-first chatbot over your own PDFs and docs, built on ChromaDB, FastAPI and Llama 3, with Redis caching.</p>
+        <p>A local, privacy-first chatbot over your own PDFs and docs, with per-file filtering, auto-ingest and session memory.</p>
+        <p class="result">Runs fully locally on Llama 3, with Redis caching for repeat questions.</p>
+        <ul class="chips"><li>FastAPI</li><li>LangChain</li><li>ChromaDB</li><li>Redis</li><li>Docker</li></ul>
         <div class="links"><a href="https://github.com/phani06041/rag-knowledge-bot">Code</a></div>
       </li>
       <li>
         <h3><a href="https://github.com/phani06041/AI-LEARNS-TO-PLAY-FLAPPY-BIRD">AI learns Flappy Bird</a></h3>
-        <p>A population of birds evolved with the NEAT genetic algorithm until they stop hitting pipes.</p>
+        <p>A population of birds evolved with the NEAT genetic algorithm.</p>
+        <p class="result">Generations learn when to flap until they clear pipes on their own.</p>
+        <ul class="chips"><li>Python</li><li>NEAT</li><li>Pygame</li></ul>
         <div class="links"><a href="https://github.com/phani06041/AI-LEARNS-TO-PLAY-FLAPPY-BIRD">Code</a></div>
       </li>
       <li>
         <h3><a href="https://github.com/phani06041/silk-board-fixer">Silk Board Fixer</a></h3>
-        <p>An agent that times the traffic signals at Bengaluru's most notorious junction, reads a second-by-second simulator report and rewrites its own playbook. Its score went from 38.3 on the first run to 96.1 by the fourth.</p>
+        <p>An agent that times the traffic signals at Bengaluru's most notorious junction, reads a second-by-second simulator report and rewrites its own playbook.</p>
+        <p class="result">Score went from 38.3 on the first run to 96.1 by the fourth, on frozen scenarios.</p>
+        <ul class="chips"><li>TypeScript</li><li>Claude</li><li>Simulation</li></ul>
         <div class="links"><a href="https://youtu.be/gsxnndaB_pY">Demo video</a><a href="https://github.com/phani06041/silk-board-fixer">Code</a></div>
       </li>
     </ul>
