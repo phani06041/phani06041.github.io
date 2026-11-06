@@ -400,27 +400,32 @@
       o.strokeText('Maddipatla', PAD, base(1));
 
       const gap = Math.max(3, Math.round(fs / 34));
+      const gap2 = Math.max(2, Math.round(gap * 0.7));
       o.clearRect(0, 0, W, H);
       o.fillText('Phanindra', PAD, base(0));
-      o.lineWidth = gap * 1.3; o.lineJoin = 'round';
+      o.lineWidth = gap2 * 1.15; o.lineJoin = 'round';
       o.strokeText('Maddipatla', PAD, base(1));
       const data = o.getImageData(0, 0, W, H).data;
-      const split = PAD + lh;
+      const split = Math.round(PAD + lh);
       const old = parts; parts = [];
-      for (let y = 0; y < H; y += gap) {
-        for (let x = 0; x < W; x += gap) {
-          if (data[(y * W + x) * 4 + 3] > 128) {
-            const prev = old[parts.length];
-            parts.push({
-              hx: x + (Math.random() - .5) * gap * .5, hy: y + (Math.random() - .5) * gap * .5,
-              x: prev ? prev.x : Math.random() * W, y: prev ? prev.y : Math.random() * H,
-              vx: 0, vy: 0,
-              c: y < split ? COLORS[(Math.random() * COLORS.length) | 0] : (Math.random() < .25 ? '#FFE45C' : '#B9B3FF'),
-              s: y < split ? gap * 0.78 : gap * 0.6
-            });
+      const scan = (y0, y1, g, filled) => {
+        for (let y = y0; y < y1; y += g) {
+          for (let x = 0; x < W; x += g) {
+            if (data[(y * W + x) * 4 + 3] > 128) {
+              const prev = old[parts.length];
+              parts.push({
+                hx: x + (Math.random() - .5) * g * .4, hy: y + (Math.random() - .5) * g * .4,
+                x: prev ? prev.x : Math.random() * W, y: prev ? prev.y : Math.random() * H,
+                vx: 0, vy: 0,
+                c: filled ? COLORS[(Math.random() * COLORS.length) | 0] : (Math.random() < .25 ? '#FFE45C' : '#B9B3FF'),
+                s: filled ? g * 0.78 : g * 0.75
+              });
+            }
           }
         }
-      }
+      };
+      scan(0, split, gap, true);
+      scan(split, H, gap2, false);
     }
 
     function frame() {
